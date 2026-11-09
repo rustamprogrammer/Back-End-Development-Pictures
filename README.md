@@ -5,7 +5,9 @@ IBM Back-End Development Capstone: Flask REST API for concert pictures.
 ## Environment Setup
 - Repository created from the provided IBM template.
 - Cloud IDE environment initialized using `bin/setup.sh`.
-- Python 3.9; virtual environment at `~/venv`.
+- Python 3.9; virtual environment named `venv` at `~/venv`, created by the supplied setup script with `python3.9 -m venv ~/venv`.
+- Activate it with `source ~/venv/bin/activate`.
+- The setup script's Python environment and dependency installation steps completed successfully in IBM Skills Network Cloud IDE, and all supplied API tests subsequently passed.
 
 ## API
 - `GET /health`: service health.
