@@ -35,7 +35,7 @@ def count():
 ######################################################################
 @app.route("/picture", methods=["GET"])
 def get_pictures():
-    pass
+    return jsonify(data), 200
 
 ######################################################################
 # GET A PICTURE
@@ -44,7 +44,10 @@ def get_pictures():
 
 @app.route("/picture/<int:id>", methods=["GET"])
 def get_picture_by_id(id):
-    pass
+    for picture in data:
+        if picture['id'] == id:
+            return jsonify(picture), 200
+    return jsonify(message='Picture not found'), 404
 
 
 ######################################################################
@@ -52,7 +55,13 @@ def get_picture_by_id(id):
 ######################################################################
 @app.route("/picture", methods=["POST"])
 def create_picture():
-    pass
+    picture = request.get_json(silent=True)
+    if not isinstance(picture, dict) or not isinstance(picture.get('id'), int):
+        return jsonify(message='A JSON object with an integer id is required'), 400
+    if any(item['id'] == picture['id'] for item in data):
+        return jsonify(Message=f"picture with id {picture['id']} already present"), 302
+    data.append(picture)
+    return jsonify(picture), 201
 
 ######################################################################
 # UPDATE A PICTURE
@@ -61,11 +70,22 @@ def create_picture():
 
 @app.route("/picture/<int:id>", methods=["PUT"])
 def update_picture(id):
-    pass
+    updated = request.get_json(silent=True)
+    if not isinstance(updated, dict):
+        return jsonify(message='A JSON object is required'), 400
+    for index, picture in enumerate(data):
+        if picture['id'] == id:
+            data[index] = {**updated, 'id': id}
+            return jsonify(data[index]), 200
+    return jsonify(message='Picture not found'), 404
 
 ######################################################################
 # DELETE A PICTURE
 ######################################################################
 @app.route("/picture/<int:id>", methods=["DELETE"])
 def delete_picture(id):
-    pass
+    for index, picture in enumerate(data):
+        if picture['id'] == id:
+            del data[index]
+            return '', 204
+    return jsonify(message='Picture not found'), 404
